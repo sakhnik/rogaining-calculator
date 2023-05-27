@@ -1,6 +1,5 @@
 from position import Position
 from storage import Storage
-from tabulate import tabulate
 
 
 def format_time(time: int) -> str:
@@ -78,13 +77,12 @@ class Card:
 
     def get_progress_table(self, width: int, start: int, deadline: int,
                            storage: Storage):
-        headers = ["КП", "Час", "Бали", "Км", "Темп"]
-        maxcolwidths = [3, 7, 2, 5, 10]
-        table = []
         prev_time: int = start
         prev_position: Position = storage.get_start_position()
         points = 0
         distance_km = 0
+
+        table = ["КП    Час    Бали   Км   Темп"]
 
         def add_leg(code: str, time: int, value: int, position: Position):
             nonlocal prev_time, prev_position, distance_km, points
@@ -94,20 +92,15 @@ class Card:
             distance_km += leg_km
             points += value
             tempo = calc_tempo(time - prev_time, leg_km)
-            table.append([code,
-                          format_time(time - start),
-                          points,
-                          f"{distance_km:.1f}",
-                          tempo])
+
+            table.append(f"{code:3} {format_time(time - start).rjust(7)} {points:4d} {distance_km:5.1f} {tempo.rjust(7)}")
             prev_time, prev_position = time, position
 
         for idx, punch in enumerate(self.punches):
-            add_leg(punch.code, punch.time,
+            add_leg(str(punch.code), punch.time,
                     punch.code // 10,
                     storage.get_control_position(punch.code))
         add_leg("F", self.finish, -self.calc_penanlty(deadline),
                 storage.get_finish_position())
 
-        table = tabulate(table, headers=headers, tablefmt="plain",
-                         maxcolwidths=maxcolwidths)
-        return table
+        return "\n".join(table)

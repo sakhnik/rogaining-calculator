@@ -3,7 +3,8 @@ def get_seconds(h, m, s):
     return (h * 60 + m) * 60 + s
 
 
-deadline = get_seconds(15, 0, 0)
+start = get_seconds(11, 0, 0)
+deadline = get_seconds(14, 0, 0)
 
 pg_host = "localhost"
 pg_db = "quickevent"

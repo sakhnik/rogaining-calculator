@@ -55,10 +55,10 @@ def test_get_progress_table():
     storage = TestStorage()
     table = card.get_progress_table(32, 11000, 11345, storage)
     ref_table = """
-КП    Час      Бали    Км  Темп
-31    01:51       3   0.4  04:39
-41    03:20       7   0.8  04:07
-51    05:00      12   1.1  04:38
-F     05:45      12   1.4  02:14
+КП    Час    Бали   Км   Темп
+31    01:51    3   0.4   04:39
+41    03:20    7   0.8   04:07
+51    05:00   12   1.1   04:38
+F     05:45   12   1.4   02:14
 """
     assert table == ref_table.strip()
