@@ -45,6 +45,7 @@ class Card:
         self.start: int = 0
         self.finish: int = 0
         self.punches: [Punch] = []
+        self.points: int = 0
 
     @classmethod
     def from_dict(cls, data):
@@ -65,17 +66,15 @@ class Card:
         return 0
 
     def calc_points(self, deadline: int):
-        points = 0
+        self.points = 0
         visited_codes = set()
         # Count by visited controls
         for p in self.punches:
-            if p.code == 10 or p.code == 900:
-                continue
             if p.code not in visited_codes:
                 visited_codes.add(p.code)
-                points += p.code // 10
-        points -= self.calc_penanlty(deadline)
-        return points
+                self.points += p.code // 10
+        self.points -= self.calc_penanlty(deadline)
+        return self.points
 
     def get_progress_table(self, width: int, start: int, deadline: int,
                            storage: Storage):

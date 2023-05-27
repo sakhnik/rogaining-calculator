@@ -46,6 +46,12 @@ def test_get_progress_table():
         def get_control_position(self, code: int) -> Position:
             return self.controls[code]
 
+        def get_class(self, number: int) -> str:
+            return "cl"
+
+        def get_name(self, number: int) -> str:
+            return "John Doe"
+
     storage = TestStorage()
     table = card.get_progress_table(32, 11000, 11345, storage)
     ref_table = """
