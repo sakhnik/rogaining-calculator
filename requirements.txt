@@ -2,3 +2,4 @@ aiohttp
 pytest
 tabulate
 psycopg2
+requests

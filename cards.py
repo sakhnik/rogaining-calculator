@@ -11,6 +11,13 @@ class Cards:
                 readout TEXT
             )
         ''')
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS uploads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                time TIMESTAMP,
+                readout TEXT
+            )
+        ''')
 
     def close(self):
         self.cursor.close()
@@ -18,6 +25,7 @@ class Cards:
 
     def insert(self, siid: int, readout: str):
         self.cursor.execute("INSERT OR REPLACE INTO cards VALUES (?, ?)", [siid, readout])
+        self.cursor.execute("INSERT INTO uploads (time, readout) VALUES (datetime('now'), ?)", [readout])
         self.conn.commit()
 
     def read(self):

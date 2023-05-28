@@ -5,17 +5,22 @@ from aiohttp import web
 import json
 from card import Card
 from cards import Cards
-from storage import DummyStorage
+from pg_storage import PgStorage
 import defs
 
 
 cards = Cards()
-storage = DummyStorage()
+storage = PgStorage()
 
 
-def print_receipt(card):
-    print(card.calc_points(defs.deadline))
+def print_receipt(card: Card):
+    clname = storage.get_class(card.number)
+    print(f"{card.number} {clname}")
+    name = storage.get_name(card.number)
+    print(f"{name}")
+    card.calc_points(defs.deadline)
     print(card.get_progress_table(32, defs.start, defs.deadline, storage))
+    print("-" * 32)
 
 
 async def handle_post(request):
