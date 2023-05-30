@@ -77,13 +77,15 @@ class Card:
             points += value
             tempo = calc_tempo(time - prev_time, leg_km)
 
-            table.append(f"{code:3} {format_time(time - start).rjust(7)} {points:4d} {distance_km:5.1f} {tempo.rjust(7)}")
+            table.append(f"{code:3} {format_time(time - start).rjust(7)}" +
+                         f" {points:4d} {distance_km:5.1f} {tempo.rjust(7)}")
             prev_time, prev_position = time, position
 
         for idx, punch in enumerate(self.punches):
             add_leg(str(punch.code), punch.time,
                     punch.code // 10,
                     storage.get_control_position(punch.code))
+        table.append("-" * width)
         add_leg("F", self.finish, -self.calc_penanlty(deadline),
                 storage.get_finish_position())
 
