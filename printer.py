@@ -240,23 +240,26 @@ class Printer:
         self.storage = storage
 
     def print(self, card: Card):
-        with open("/dev/usb/lp0", "wb") as f:
-            f.write(init)
-            f.write(cp1251)
-            f.write(zelesta_logo)
-            f.write("Святошин рогейн 3 години".encode("cp1251"))
-            f.write(b"\n\n")
-            clname = self.storage.get_class(card.number)
-            f.write(bold_on)
-            f.write(f"{card.number} ".encode("cp1251"))
-            f.write(f"{clname}".encode("cp1251"))
-            f.write(b"\n")
-            name = self.storage.get_name(card.number)
-            f.write(f"{name}".encode("cp1251"))
-            f.write(b"\n")
-            f.write(bold_off)
-            table = card.get_progress_table(32, defs.start, defs.deadline,
-                                            self.storage)
-            f.write(table.encode("cp1251"))
-            f.write(b"\n\n\n\n")
-            f.write(cut)
+        try:
+            with open("/dev/usb/lp0", "wb") as f:
+                f.write(init)
+                f.write(cp1251)
+                f.write(zelesta_logo)
+                f.write("Святошин рогейн 3 години".encode("cp1251"))
+                f.write(b"\n\n")
+                clname = self.storage.get_class(card.number)
+                f.write(bold_on)
+                f.write(f"{card.number} ".encode("cp1251"))
+                f.write(f"{clname}".encode("cp1251"))
+                f.write(b"\n")
+                name = self.storage.get_name(card.number)
+                f.write(f"{name}".encode("cp1251"))
+                f.write(b"\n")
+                f.write(bold_off)
+                table = card.get_progress_table(32, defs.start, defs.deadline,
+                                                self.storage)
+                f.write(table.encode("cp1251"))
+                f.write(b"\n\n\n\n")
+                f.write(cut)
+        except FileNotFoundError as e:
+            print("No printer found: " + e.strerror)
