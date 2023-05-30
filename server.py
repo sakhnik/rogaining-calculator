@@ -7,10 +7,12 @@ from card import Card
 from cards import Cards
 from pg_storage import PgStorage
 import defs
+from printer import Printer
 
 
 cards = Cards()
 storage = PgStorage()
+printer = Printer(storage)
 
 
 def print_receipt(card: Card):
@@ -21,6 +23,7 @@ def print_receipt(card: Card):
     card.calc_points(defs.deadline)
     print(card.get_progress_table(32, defs.start, defs.deadline, storage))
     print("-" * 32)
+    printer.print(card)
 
 
 async def handle_post(request):
