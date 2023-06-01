@@ -13,6 +13,9 @@ pg_pass = ""
 pg_ns = "sprint2023_5"
 
 server_port = 12345
+quickevent_port = 1234
+
+quickevent_url = f"http://localhost:{quickevent_port}/card"
 
 
 def format_time(time: int) -> str:

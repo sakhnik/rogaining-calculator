@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import asyncio
-from aiohttp import web
+from aiohttp import web, ClientSession
 import json
 from card import Card
 from cards import Cards
@@ -29,6 +29,12 @@ def print_receipt(card: Card):
 async def handle_post(request):
     post_data = await request.read()
     card = Card.from_dict(json.loads(post_data.decode('utf-8')))
+    if card.number >= 100:
+        # Pass the request along to Quick Event
+        async with ClientSession() as session:
+            async with session.post(defs.quickevent_url,
+                                    data=post_data) as response:
+                return web.Response(text=await response.text())
     cards.insert(card.number, post_data.decode('utf-8'))
     print_receipt(card)
     response = web.Response(text='Thanks!')
